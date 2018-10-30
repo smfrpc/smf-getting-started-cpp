@@ -30,6 +30,12 @@ function release {
     ${buildcmd}
 }
 
-# the following is only needed once; prevents github issue tickets
-git submodule update --init --recursive
+if [[ ! -d $root/build ]]; then
+   # the following is only needed once; prevents github issue tickets
+   git submodule update --init --recursive
+   smfdir=$root/src/third_party/smf
+   echo "Adding system dependencies"
+   sudo $smfdir/install-deps.sh
+   sudo $smfdir/src/third_party/seastar/install-dependencies.sh
+fi
 release
