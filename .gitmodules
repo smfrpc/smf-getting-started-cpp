@@ -1,0 +1,4 @@
+[submodule "src/third_party/smf"]
+	path = src/third_party/smf
+	url = https://github.com/senior7515/smf
+	ignore = dirty
