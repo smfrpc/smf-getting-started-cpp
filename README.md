@@ -7,8 +7,8 @@ getting started for smf - The Fastest RPC In The West
 1. ./build.sh
 2. cd build/release
 3. Run the apps
-    a.   ./src/demo_server
-    b.   ./src/demo_client
+    *   ./src/demo_server
+    *   ./src/demo_client
 
 # Profit!
 
