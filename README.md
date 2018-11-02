@@ -10,6 +10,13 @@ getting started for smf - The Fastest RPC In The West
     *   ./src/demo_server
     *   ./src/demo_client
 
+### Note for Ubuntu users. Seastar needs gcc-7 or above
+
+```
+CC=/usr/bin/gcc-7 CXX=/usr/bin/g++-7 ./build.sh
+```
+
+
 # Profit!
 
 Drop us a line!
