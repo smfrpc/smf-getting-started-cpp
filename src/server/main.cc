@@ -68,8 +68,6 @@ main(int args, char **argv, char **env) {
 
     // Normal services would either use the defaults or something smarter
     // This triggers the memory pressure
-    args.basic_req_size = 60 /*payload size*/;
-    args.bloat_mult = 1;  // no bloat
     args.memory_avail_per_core =
       static_cast<uint64_t>(0.9 * seastar::memory::stats().total_memory());
 
