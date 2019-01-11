@@ -4,19 +4,18 @@
 #include <chrono>
 #include <iostream>
 
-#include <core/app-template.hh>
-#include <core/distributed.hh>
-
-#include "smf/histogram_seastar_utils.h"
-#include "smf/load_channel.h"
-#include "smf/load_generator.h"
-#include "smf/log.h"
-#include "smf/unique_histogram_adder.h"
+#include <seastar/core/app-template.hh>
+#include <seastar/core/distributed.hh>
+#include <smf/histogram_seastar_utils.h>
+#include <smf/load_channel.h>
+#include <smf/load_generator.h>
+#include <smf/log.h>
+#include <smf/unique_histogram_adder.h>
 
 // templates
 #include "demo_service.smf.fb.h"
 
-using client_t = smf_gen::demo::SmfStorageClient;
+using client_t   = smf_gen::demo::SmfStorageClient;
 using load_gen_t = smf::load_generator<client_t>;
 static const char *kPayload1Kbytes =
   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
@@ -47,8 +46,7 @@ static const char *kPayload1Kbytes =
 // This example is just using the load generator to test performance
 //
 struct method_callback {
-  seastar::future<>
-  operator()(client_t *c, smf::rpc_envelope &&e) {
+  seastar::future<> operator()(client_t *c, smf::rpc_envelope &&e) {
     return c->Get(std::move(e)).then([](auto ret) {
       return seastar::make_ready_future<>();
     });
@@ -56,16 +54,15 @@ struct method_callback {
 };
 
 struct generator {
-  smf::rpc_envelope
-  operator()(const boost::program_options::variables_map &cfg) {
+  smf::rpc_envelope operator()(
+    const boost::program_options::variables_map &cfg) {
     smf::rpc_typed_envelope<smf_gen::demo::Request> req;
     req.data->name = kPayload1Kbytes;
     return req.serialize_data();
   }
 };
 
-void
-cli_opts(boost::program_options::options_description_easy_init o) {
+void cli_opts(boost::program_options::options_description_easy_init o) {
   namespace po = boost::program_options;
 
   o("ip", po::value<std::string>()->default_value("127.0.0.1"),
@@ -81,10 +78,9 @@ cli_opts(boost::program_options::options_description_easy_init o) {
     "number of green threads per real thread (seastar::futures<>)");
 }
 
-int
-main(int args, char **argv, char **env) {
+int main(int args, char **argv, char **env) {
   seastar::distributed<load_gen_t> load;
-  seastar::app_template app;
+  seastar::app_template            app;
   cli_opts(app.add_options());
 
   return app.run(args, argv, [&] {
@@ -107,8 +103,8 @@ main(int args, char **argv, char **env) {
       .then([&load] {
         LOG_INFO("Benchmarking server");
         return load.invoke_on_all([](load_gen_t &server) {
-          load_gen_t::generator_cb_t gen = generator{};
-          load_gen_t::method_cb_t method = method_callback{};
+          load_gen_t::generator_cb_t gen    = generator{};
+          load_gen_t::method_cb_t    method = method_callback{};
           return server.benchmark(gen, method).then([](auto test) {
             LOG_INFO("Bench: {}", test);
             return seastar::make_ready_future<>();

@@ -1,5 +1,5 @@
-add_subdirectory(third_party)
-
+find_package(smf)
+include(smfc_generator)
 smfc_gen(
   CPP
   TARGET_NAME demo_fbs
@@ -8,12 +8,12 @@ smfc_gen(
 
 # server
 add_executable(demo_server server/main.cc "${demo_fbs}")
-target_link_libraries(demo_server smf)
+target_link_libraries(demo_server smf::smf)
 target_include_directories(demo_server PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 # client
 add_executable(demo_client client/main.cc "${demo_fbs}")
-target_link_libraries(demo_client smf)
+target_link_libraries(demo_client smf::smf)
 target_include_directories(demo_client PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 
 # helpers install
