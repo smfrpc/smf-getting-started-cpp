@@ -1,4 +1,9 @@
-# smf-getting-started-cpp
+# [smf - the fastest RPC in the West](http://smfrpc.github.io/smf/) 
+
+[![Travis-ci Build Status](https://travis-ci.org/smfrpc/smf-getting-started-cpp.svg?branch=master)](https://travis-ci.org/smfrpc/smf-getting-started-cpp)
+
+# child integration demo: smf-getting-started-cpp
+
 getting started for smf - The Fastest RPC In The West
 
 
@@ -7,13 +12,19 @@ getting started for smf - The Fastest RPC In The West
 1. ./build.sh
 2. cd build/release
 3. Run the apps
-    *   ./src/demo_server
-    *   ./src/demo_client
+    *   ./src/demo_server -c 1 & (`run on one core; background`)
+    *   ./src/demo_client -c 1   (`run on one core`)
 
 ### Note for Ubuntu users. Seastar needs gcc-7 or above
 
 ```
-CC=/usr/bin/gcc-7 CXX=/usr/bin/g++-7 ./build.sh
+# set something like this on your CI machine
+
+sudo update-alternatives --remove-all gcc || true
+sudo update-alternatives --install /usr/bin/g++ g++-8 /usr/bin/g++-8  100
+sudo update-alternatives --install /usr/bin/gcc gcc-8 /usr/bin/gcc-8  100
+
+./build.sh
 ```
 
 
@@ -26,6 +37,6 @@ Drop us a line!
 Site         | Link
 ------------ | --------
 Mailing List  | https://groups.google.com/forum/#!forum/smf-dev
-Documentation | https://senior7515.github.io/smf/
+Documentation | https://smfrpc.github.io/smf/
 
-# [Official Documentation](https://senior7515.github.io/smf)
+# [Official Documentation](https://smfrpc.github.io/smf)
