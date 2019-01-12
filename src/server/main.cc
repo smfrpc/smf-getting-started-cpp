@@ -4,33 +4,34 @@
 #include <chrono>
 #include <iostream>
 
-#include <core/app-template.hh>
-#include <core/distributed.hh>
-#include <net/api.hh>
+#include <seastar/core/app-template.hh>
+#include <seastar/core/distributed.hh>
+#include <seastar/net/api.hh>
+#include <smf/histogram_seastar_utils.h>
+#include <smf/log.h>
+#include <smf/rpc_filter.h>
+#include <smf/rpc_server.h>
+#include <smf/unique_histogram_adder.h>
+#include <smf/zstd_filter.h>
 
-#include "smf/histogram_seastar_utils.h"
-#include "smf/log.h"
-#include "smf/rpc_filter.h"
-#include "smf/rpc_server.h"
-#include "smf/unique_histogram_adder.h"
-#include "smf/zstd_filter.h"
-
+// generated
 #include "demo_service.smf.fb.h"
 
 class storage_service final : public smf_gen::demo::SmfStorage {
-  virtual seastar::future<smf::rpc_typed_envelope<smf_gen::demo::Response>>
-  Get(smf::rpc_recv_typed_context<smf_gen::demo::Request> &&rec) final {
+  virtual seastar::future<smf::rpc_typed_envelope<smf_gen::demo::Response>> Get(
+    smf::rpc_recv_typed_context<smf_gen::demo::Request> &&rec) final {
     smf::rpc_typed_envelope<smf_gen::demo::Response> data;
     // return the same payload
-    if (rec) { data.data->name = rec->name()->c_str(); }
+    if (rec) {
+      data.data->name = rec->name()->c_str();
+    }
     data.envelope.set_status(200);
     return seastar::make_ready_future<
       smf::rpc_typed_envelope<smf_gen::demo::Response>>(std::move(data));
   }
 };
 
-void
-cli_opts(boost::program_options::options_description_easy_init o) {
+void cli_opts(boost::program_options::options_description_easy_init o) {
   namespace po = boost::program_options;
   o("ip", po::value<std::string>()->default_value("127.0.0.1"),
     "ip to connect to");
@@ -39,11 +40,10 @@ cli_opts(boost::program_options::options_description_easy_init o) {
     "port for http stats service");
 }
 
-int
-main(int args, char **argv, char **env) {
+int main(int args, char **argv, char **env) {
   std::setvbuf(stdout, nullptr, _IOLBF, 1024);
   seastar::distributed<smf::rpc_server> rpc;
-  seastar::app_template app;
+  seastar::app_template                 app;
   cli_opts(app.add_options());
 
   return app.run_deprecated(args, argv, [&] {
@@ -62,8 +62,8 @@ main(int args, char **argv, char **env) {
     auto &cfg = app.configuration();
 
     smf::rpc_server_args args;
-    args.ip = cfg["ip"].as<std::string>().c_str();
-    args.rpc_port = cfg["port"].as<uint16_t>();
+    args.ip        = cfg["ip"].as<std::string>().c_str();
+    args.rpc_port  = cfg["port"].as<uint16_t>();
     args.http_port = cfg["httpport"].as<uint16_t>();
 
     // Normal services would either use the defaults or something smarter
