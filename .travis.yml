@@ -1,0 +1,7 @@
+dist: xenial
+sudo: required
+language: cpp
+
+script:
+  - sudo ./install-deps.sh
+  - ./build.sh
