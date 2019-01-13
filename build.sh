@@ -5,7 +5,7 @@ buildcmd="ninja -C $root/build"
 cd $root
 function release {
     echo "Release"
-    $root/cooking.sh -r wellknown
+    $root/cooking.sh -r wellknown -t Release
     ln -sfn "${builddir}/compile_commands.json" "${root}/compile_commands.json"
     ${buildcmd}
 }
