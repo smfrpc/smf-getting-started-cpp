@@ -4,4 +4,4 @@ language: cpp
 
 script:
   - sudo ./install-deps.sh
-  - ./build.sh
+  - travis_wait 40 ./build.sh
