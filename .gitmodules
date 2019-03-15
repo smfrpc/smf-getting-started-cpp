@@ -1,0 +1,3 @@
+[submodule "src/smf"]
+	path = src/smf
+	url = https://github.com/smfrpc/smf.git
