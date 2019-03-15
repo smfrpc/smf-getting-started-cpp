@@ -12,6 +12,24 @@ getting started for smf - The Fastest RPC In The West
 Build the demo server and client, which will also build smf and its
 dependencies. **Note that the initial build may take a long time**.
 
+## Ensure that you cloned the repository recursively
+
+the parent `smf` repo is a git submodule. Either git clone --recursive
+or update the submodule
+
+```
+git submodule update --init --recursive
+```
+
+
+## Ensure a few small system dependencies:
+
+```
+./install-deps.sh
+```
+
+
+## Build it!
 
 ```bash
 # ensure gcc >= gcc-7
@@ -23,6 +41,8 @@ mkdir -p build && cd build && cmake .. && make
 
 # alternatively use make -j$(nproc) to parallelize the builds
 ```
+
+## Run it! 
 
 After the build completes:
 
