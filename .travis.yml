@@ -4,7 +4,7 @@ language: cpp
 
 script:
   - sudo ./install-deps.sh
-  - ./travis_stdout.sh "./cooking.sh -r wellknown -t Release -- -DCMAKE_CXX_FLAGS_RELEASE='-O1 -DNDEBUG' > ./travis_cmake.log"
-  - tail --lines=500 ./travis_cmake.log
-  - ninja -C build
-  - echo "FINISHED! SUCCESS!"
+  - mkdir build
+  - cd build
+  - cmake ..
+  - make
