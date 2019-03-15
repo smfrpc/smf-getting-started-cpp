@@ -9,11 +9,19 @@ getting started for smf - The Fastest RPC In The West
 
 # How-to?
 
-1. ./build.sh
-2. cd build/release
-3. Run the apps
-    *   ./src/demo_server -c 1 & (`run on one core; background`)
-    *   ./src/demo_client -c 1   (`run on one core`)
+Build the demo server and client, which will also build smf and its
+dependencies. **Note that the initial build may take a long time**.
+
+```bash
+cmake .
+make
+```
+
+After the build completes:
+
+```
+./src/demo_server -c 1 & (`run on one core; background`)
+./src/demo_client -c 1   (`run on one core`)
 
 ### Note for Ubuntu users. Seastar needs gcc-7 or above
 
